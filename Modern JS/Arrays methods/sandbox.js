@@ -87,3 +87,4 @@ const items = [
 
   items_to_sort.sort((a, b) => b.price - a.price);
   console.log(items_to_sort);
+  console.log(document);

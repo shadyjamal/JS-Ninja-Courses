@@ -3,8 +3,8 @@ const addform = document.querySelector('.add');
 const ul = document.querySelector('ul');
 const dlt = document.querySelector('.delete');
 
-//Add Todos
 
+//Add Todos
 addform.addEventListener('submit', e => {
     e.preventDefault();
     if (addform.add.value)
@@ -26,3 +26,19 @@ ul.addEventListener('click', e => {
 })
 
 //Search Todos
+
+search.addEventListener('keyup', e => {
+    let li = document.querySelectorAll('LI');
+    li.forEach(item => {
+        if (item.textContent.search(e.target.value) == -1)
+        {
+            item.classList.remove('d-flex');
+            item.classList.add('d-none');
+        }
+        else
+        {
+            item.classList.remove('d-none');
+            item.classList.add('d-flex');
+        }
+    })
+});

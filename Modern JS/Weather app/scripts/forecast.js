@@ -1,35 +1,36 @@
-let key = 'DkhhlAf0OlQ1UvCDaK10MWJlsQZqX6LN';
-
-
-const getweather = async(ckey) => {
-    const base = 'http://dataservice.accuweather.com/currentconditions/v1/';
-    const query = `${ckey}?apikey=${key}`;
-
-    const response = await fetch(base+query);
-    if (response.status != 200)
+class Forecast{
+    constructor()
     {
-        throw Error('Could not fetch the data')
+        this.key = 'DkhhlAf0OlQ1UvCDaK10MWJlsQZqX6LN';
+        this.weatherURL = 'http://dataservice.accuweather.com/currentconditions/v1/';
+        this.cityURL = 'http://dataservice.accuweather.com/locations/v1/cities/search';
     }
-    const data = await response.json();
-    return data[0];
-}
-const getcity = async(city) =>{
-    const base = 'http://dataservice.accuweather.com/locations/v1/cities/search';
-    const query = `?apikey=${key}&q=${city}`;
-
-    const response = await fetch(base+query);
-    if (response.status != 200)
-    {
-        throw Error('Could not fetch the data')
+    async updatecity(city){
+        const citydets = await this.getcity(city);
+        const weather = await this.getweather(citydets.Key);
+        return {
+            citydets,
+            weather
+        };
     }
-    const data = await response.json();
-    return data[0];
+    async getcity(city){
+        const query = `?apikey=${this.key}&q=${city}`;
+        const response = await fetch(this.cityURL + query);
+        if (response.status != 200)
+        {
+            throw Error('Could not fetch the data')
+        }
+        const data = await response.json();
+        return data[0];
+    }
+    async  getweather(ckey){
+        const query = `${ckey}?apikey=${this.key}`;
+        const response = await fetch(this.weatherURL+query);
+        if (response.status != 200)
+        {
+            throw Error('Could not fetch the data')
+        }
+        const data = await response.json();
+        return data[0];
+    }
 }
-
-// getcity('manchester').then(data => {
-//         console.log('Resolved', data.Key);
-//         return getweather(data.Key);
-//     }).then(data => {
-//         console.log(data);
-//     })
-//     .catch(err => console.log('Error', err.message));
